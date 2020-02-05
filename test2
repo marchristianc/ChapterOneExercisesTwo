@@ -1,0 +1,4 @@
+In this chapter, we'll start with one of the simplest test generation
+ techniques. The key idea of random text generation, also known
+ as fuzzing, is to feed a string of ... The idea is to produce random
+ characters, adding them to a buffer string
