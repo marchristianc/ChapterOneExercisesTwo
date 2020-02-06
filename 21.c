@@ -6,6 +6,16 @@
 bool openfiles(int argc, const char *argv[], FILE** fin, FILE** fout, int *n);
 void closefiles(FILE* fin, FILE* fout);
 
+void entab(FILE* fin, FILE* fout, int tab_interval){
+    int counter = 1, c;
+    while((c = fgetc(fin)) != EOF && c == ' ') { counter++; }
+    int ntabs = counter / tab_interval;
+    int nspaces = counter % tab_interval;
+    while(ntabs-- > 0) { fputc('\t', fout); }
+    while(nspaces-- > 0) { fputc(' ', fout); }
+    fputc(c, fout);
+}
+
 int main(int argc, const char *argv[]){
     FILE* fin;
     FILE* fout;
@@ -17,25 +27,10 @@ int main(int argc, const char *argv[]){
     }
 
     int c;
-    int spaces = 0;
-    int charPresent = 0;
     while((c = fgetc(fin)) != EOF){
-        if(c == ' '){
-            spaces++;
-        }else{
-            //calculate if we can fit any tabs into the space count
-            //tab_size - one character present
-            for(; spaces >= n-charPresent; spaces -= n)
-                fputc('\t', fout);
-
-            //remaining spaces
-            for(; spaces > 0; spaces--)
-                fputc(' ', fout);
-
-            charPresent = 0;
-            if(c != '\t')
-                charPresent++;
-            fputc(c, fout);
+        if(c != ' ') { fputc(c, fout); }
+        else{
+            entab(fin, fout, n);
         }
     }
 
